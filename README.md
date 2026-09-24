@@ -4,7 +4,7 @@
 
 - Grant Willis - Role:
 - Joel Agyeman - Role:
-- Jack Braun - Role:
+- Jack Braun - Role: Developer
 - Nolan Earl - Role:
 
 ## Project Overview
