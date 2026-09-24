@@ -1,42 +1,38 @@
 # Roommate Finder App
 
-## Team Members
+> Finding potential roommates can be unreliable, slow, and lead to bad matches. 
+> The Roommate Finder app is a full stack web application designed to solve these problems by 
+> matching people together according to their profiles.
 
-- Grant Willis - Role:
-- Joel Agyeman - Role:
-- Jack Braun - Role: Developer
-- Nolan Earl - Role:
+---
 
 ## Project Overview
 
-The project involves the planning and development of a roommate finder application that will assist people with finding potential roommates based on profile matches and search criteria. By using the scrum method, our team will plan out and work on different aspects of the application one at a time with sprints.
+placeholder
 
-## Goals and Objectives
+[Design Document](docs/design-document.md)
 
-- goal
-- objective
+---
 
-## Functional Requirements
+## Technology Used
 
-### Example Requirement
-1. Given [Prerequisite]
-2. When [Series of steps]
-3. Then [Expected result]
+- Java
+- Spring Boot
+- MySQL Database
+- frontend/placeholder
 
-## Storyboard
+---
 
-![story board mockup](linktoimage)
+## Running The Application
 
-description of image
+### Before Running You Must Have:
 
-## Class Diagrams
+- JDK 25
+- Maven
+- MySQL Server 9.7.2
 
-### Class
+### Step To Run:
 
-![diagram image](linktoimage)
-
-diagram description
-
-## Architecture
-
-![diagram image](linktoimage)
+1. Clone the repo from GitHub
+2. Change database configuration to match MySQL instance
+3. Build and run the application using Maven
