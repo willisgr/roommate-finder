@@ -47,7 +47,6 @@ Personally our objectives for this app are to use all of the elements of app bui
   -Given two users are connected
   -When one user writes and sends a message
   -Then the message is stored and displayed in the conversation.
-
 <br>   Scenario 2: View Conversation
   -Given a user has an existing conversation
   -When they open the conversation
