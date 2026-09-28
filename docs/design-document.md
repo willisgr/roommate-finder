@@ -25,7 +25,7 @@ Personally our objectives for this app are to use all of the elements of app bui
   -Given a user is new to the website
   -When they enter a name, email, personal profile information, and a password
   -Then an account is created that they can log in to
-   Scenario 2: Unsuccessful registration
+<br>   Scenario 2: Unsuccessful registration
   -Given a user enters an email already in use, or does not fill out all required information
   -When they submit the registration
   -Then they receive an error that describes the issues with their account creation
@@ -48,7 +48,7 @@ Personally our objectives for this app are to use all of the elements of app bui
   -When one user writes and sends a message
   -Then the message is stored and displayed in the conversation.
 
-   Scenario 2: View Conversation
+<br>   Scenario 2: View Conversation
   -Given a user has an existing conversation
   -When they open the conversation
   -Then the application displays the previous messages between the users.
