@@ -13,15 +13,45 @@ The project involves the planning and development of a roommate finder applicati
 
 ## Goals and Objectives
 
-- goal
-- objective
+The major goal of our project is to create an easy to use application that gives people a simple way to find potential roommates, whether it be for school or just in general. People should be able to create their own profile, search and filter roommates they are searching for. We want a simple and user friendly UI/UX that also gives users a way to connect with potential matches.
+Personally our objectives for this app are to use all of the elements of app building we are learning in class in this app. Using Java & Spring Boot for backend development. Use Maven for our dependencies, and MySQL to store data. Collaborating on this project through GitHub and a scrum development method will also provide us with experience that will be carried with us throughout our career.
+
 
 ## Functional Requirements
+**User Creation, Searching for Roommates, Viewing Profiles, Messaging Users
+### Example Requirements
+1. User Creation
+   Scenario 1: Successful registration
+  -Given a user is new to the website
+  -When they enter a name, email, personal profile information, and a password
+  -Then an account is created that they can log in to
+   Scenario 2: Unsuccessful registration
+  -Given a user enters an email already in use, or does not fill out all required information
+  -When they submit the registration
+  -Then they receive an error that describes the issues with their account creation
 
-### Example Requirement
-1. Given [Prerequisite]
-2. When [Series of steps]
-3. Then [Expected result]
+2. Searching for roommates
+   Scenario: Basic search/filter
+  -Given a logged in user has a profile
+  -When they search or filter by city or other specifications
+  -Then they will be shown users profile previews who match the criteria
+
+3. Viewing Profiles
+   Scenario: Potential Match
+  -Given a user sees a profile that might match their needs
+  -When they click to view their profile
+  -Then all of the more in depth information in their profile will be displayed
+
+4. Messaging Users
+   Scenario 1: Send Message
+  -Given two users are connected
+  -When one user writes and sends a message
+  -Then the message is stored and displayed in the conversation.
+
+   Scenario 2: View Conversation
+  -Given a user has an existing conversation
+  -When they open the conversation
+  -Then the application displays the previous messages between the users.
 
 ## Storyboard
 
