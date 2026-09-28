@@ -18,7 +18,7 @@ Personally our objectives for this app are to use all of the elements of app bui
 
 
 ## Functional Requirements
-**User Creation, Searching for Roommates, Viewing Profiles, Messaging Users
+User Creation, Searching for Roommates, Viewing Profiles, Messaging Users
 ### Example Requirements
 1. User Creation
 <br>   Scenario 1: Successful registration
