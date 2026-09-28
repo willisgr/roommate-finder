@@ -21,7 +21,7 @@ Personally our objectives for this app are to use all of the elements of app bui
 **User Creation, Searching for Roommates, Viewing Profiles, Messaging Users
 ### Example Requirements
 1. User Creation
-   Scenario 1: Successful registration
+<br>   Scenario 1: Successful registration
   -Given a user is new to the website
   -When they enter a name, email, personal profile information, and a password
   -Then an account is created that they can log in to
@@ -31,19 +31,19 @@ Personally our objectives for this app are to use all of the elements of app bui
   -Then they receive an error that describes the issues with their account creation
 
 2. Searching for roommates
-   Scenario: Basic search/filter
+<br>   Scenario: Basic search/filter
   -Given a logged in user has a profile
   -When they search or filter by city or other specifications
   -Then they will be shown users profile previews who match the criteria
 
 3. Viewing Profiles
-   Scenario: Potential Match
+<br>   Scenario: Potential Match
   -Given a user sees a profile that might match their needs
   -When they click to view their profile
   -Then all of the more in depth information in their profile will be displayed
 
 4. Messaging Users
-   Scenario 1: Send Message
+<br>   Scenario 1: Send Message
   -Given two users are connected
   -When one user writes and sends a message
   -Then the message is stored and displayed in the conversation.
