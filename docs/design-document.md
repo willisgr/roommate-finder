@@ -2,7 +2,7 @@
 
 ## Team Members
 
-- Grant Willis - Role:
+- Grant Willis - Role: Product Owner
 - Joel Agyeman - Role:
 - Jack Braun - Role: Developer
 - Nolan Earl - Role:
@@ -68,4 +68,4 @@ diagram description
 
 ## Architecture
 
-![diagram image](linktoimage)
+![diagram image](./images/ArchitectureDiagram.png)

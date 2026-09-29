@@ -1,0 +1,20 @@
+@startuml
+
+actor "Client"
+component "Front End"
+
+package "Spring Boot" {
+  component "Controllers"
+  component "Business Logic"
+  component "Spring JPA"
+}
+
+database MySQL
+
+"Client" -- "Front End"
+"Front End" -- "Controllers"
+"Controllers" -- "Business Logic"
+"Business Logic" -- "Spring JPA"
+"Spring JPA" -- "MySQL"
+
+@enduml
