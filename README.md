@@ -8,7 +8,7 @@
 
 ## Project Overview
 
-placeholder
+The project involves the planning and development of a roommate finder application that will assist people with finding potential roommates based on profile matches and search criteria. By using the scrum method, our team will plan out and work on different aspects of the application one at a time with sprints.
 
 [Design Document](docs/design-document.md)
 
