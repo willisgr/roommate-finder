@@ -3,9 +3,9 @@
 ## Team Members
 
 - Grant Willis - Role: Product Owner
-- Joel Agyeman - Role:
-- Jack Braun - Role: Developer
-- Nolan Earl - Role:
+- Joel Agyeman - Role: DevOps Developer
+- Jack Braun - Role: Scrum Master
+- Nolan Earl - Role: Developer
 
 ## Project Overview
 
@@ -54,17 +54,18 @@ User Creation, Searching for Roommates, Viewing Profiles, Messaging Users
 
 ## Storyboard
 
-![story board mockup](linktoimage)
-
-description of image
+![story board mockup](./images/Wireframes.png)
 
 ## Class Diagrams
 
-### Class
+![diagram image](./images/ClassDiagram.png)
 
-![diagram image](linktoimage)
+### Class Descriptions
 
-diagram description
+- User: Stores and handles login information and basic attributes for a user.
+- Profile: Maps to user class 1 to 1. Stores user matching attributes and preferences.
+- Matcher: Calculates the match percent of users based on their profile attributes.
+- Message: Manages messages being sent between users when a match is found.
 
 ## Architecture
 
