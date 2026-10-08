@@ -1,7 +1,9 @@
 spring:
   application:
-    name: roommatefinder
+    name: myDB
   datasource:
-    url:
-    username:
-    password:
+    url: jdbc:mysql://localhost:3306/roommate-finder?createDatabaseIfNotExist=true
+    username: root
+    password: sqlpwd
+  jpa:
+    show-sql: true
