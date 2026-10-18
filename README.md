@@ -18,8 +18,8 @@ The project involves the planning and development of a roommate finder applicati
 
 - Java
 - Spring Boot
-- MySQL Database
-- frontend/placeholder
+- MySQL
+- React
 
 ---
 
@@ -31,8 +31,8 @@ The project involves the planning and development of a roommate finder applicati
 - Maven
 - MySQL Server 9.7.2
 
-### Step To Run:
+### Steps To Run:
 
 1. Clone the repo from GitHub
-2. Change database configuration to match MySQL instance
+2. Change application configuration to connect to your MySQL instance.
 3. Build and run the application using Maven
