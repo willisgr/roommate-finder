@@ -24,4 +24,7 @@ public class Friendship {
     @JoinColumn(name = "friend_id")
     private User friend;
 
+    @Column(name = "status")
+    private String status;
+
 }
