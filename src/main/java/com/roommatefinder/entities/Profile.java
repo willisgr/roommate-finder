@@ -76,4 +76,10 @@ public class Profile {
     @Column(name = "guest_preference", nullable = false)
     private Byte guestPreference;
 
+    public boolean[] getBoolPreferences() {
+        return new boolean[] {sharedGroceries, isPetFriendly, delegatedChores};
+    }
+    public double[] getScalePreferences() {
+        return new double[] {cleanlinessPreference, socialPreference, guestPreference};
+    }
 }
