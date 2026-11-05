@@ -3,8 +3,8 @@ spring:
     name: roommate-finder
   datasource:
     url: jdbc:mysql://localhost:3306/roommatefinderdb?createDatabaseIfNotExist=true
-    username:
-    password:
+    username: root
+    password: password
 matcher:
   weights:
     bool: 1, 1, 1
