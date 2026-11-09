@@ -17,28 +17,39 @@ public class UserController {
     private final UserRepository userRepository;
 
     @GetMapping()
-    public Iterable<User> getAllUsers() {
-        return userRepository.findAll();
+    public Iterable<UserDto> getAllUsers() {
+        return userRepository.findAll()
+            .stream()
+            .map(user -> new UserDto(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail()))
+            .toList();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
+    public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
         var user = userRepository.findById(id).orElse(null);
         if (user == null) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(user);
+        var userDto = new UserDto(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail());
+        
+        return ResponseEntity.ok(userDto);
     }
 
     @PostMapping()
-    public ResponseEntity<CreateUserRequest> createUser(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<UserDto> createUser(@RequestBody CreateUserRequest request) {
         var user = new User();
         user.setUsername(request.username);
         user.setEmail(request.email);
         user.setPassword(request.password);
         User saved = userRepository.save(user);
 
-        var response = new CreateUserRequest(saved.getUsername(), saved.getEmail(), saved.getPassword());
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        var userDto = new UserDto(saved.getId(), saved.getUsername(), saved.getEmail());
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 }
