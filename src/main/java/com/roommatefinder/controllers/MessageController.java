@@ -1,31 +1,29 @@
 package com.roommatefinder.controllers;
 
-import com.roommatefinder.entities.Message;
-import com.roommatefinder.repositories.MessageRepository;
-import com.roommatefinder.repositories.UserRepository;
+import com.roommatefinder.dtos.MessageResponse;
+import com.roommatefinder.dtos.SendMessageRequest;
+import com.roommatefinder.services.MessageService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/messages")
 public class MessageController {
 
-    private final MessageRepository messageRepository;
-    private final UserRepository userRepository;
+    private final MessageService messageService;
 
-    @GetMapping()
-    public Iterable<Message> getAllMessages() {
-        return messageRepository.findAll();
+    @GetMapping("/user/{userId}")
+    public List<MessageResponse> getMessagesForUser(@PathVariable Long userId) {
+        return messageService.getMessagesForUser(userId);
     }
 
-    @GetMapping("/{id}")
-    public Optional<Message> getMessageByUserId(Long id) {
-        
-        return messageRepository.findById(id);
+    @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
+    public MessageResponse sendMessage(@RequestBody SendMessageRequest request) {
+        return messageService.sendMessage(request);
     }
 }
