@@ -2,6 +2,7 @@ package com.roommatefinder.controllers;
 
 
 import com.roommatefinder.dtos.CreateUserRequest;
+import com.roommatefinder.dtos.UserDto;
 import com.roommatefinder.entities.User;
 import com.roommatefinder.repositories.UserRepository;
 import lombok.AllArgsConstructor;
