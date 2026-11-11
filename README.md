@@ -36,3 +36,18 @@ The project involves the planning and development of a roommate finder applicati
 1. Clone the repo from GitHub
 2. Change application configuration to connect to your MySQL instance.
 3. Build and run the application using Maven
+
+## Running The Test Environment
+
+### Prerequisites
+
+- WSL if running on Windows
+- Docker Desktop
+
+### Running
+
+1. run this command in project root directory
+
+~~~bash
+docker-compose up --build
+~~~
