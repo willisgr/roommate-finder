@@ -4,6 +4,7 @@ package com.roommatefinder.controllers;
 import com.roommatefinder.dtos.CreateUserRequest;
 import com.roommatefinder.dtos.UserDto;
 import com.roommatefinder.entities.User;
+import com.roommatefinder.exceptions.UserNotFoundException;
 import com.roommatefinder.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,10 +31,8 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
-        var user = userRepository.findById(id).orElse(null);
-        if (user == null) {
-            return ResponseEntity.notFound().build();
-        }
+        var user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
         var userDto = new UserDto(
                 user.getId(),
                 user.getUsername(),
