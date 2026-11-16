@@ -5,6 +5,7 @@ import com.roommatefinder.dtos.CreateUserRequest;
 import com.roommatefinder.dtos.UserDto;
 import com.roommatefinder.entities.User;
 import com.roommatefinder.exceptions.UserNotFoundException;
+import com.roommatefinder.mappers.UserMapper;
 import com.roommatefinder.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,15 +18,13 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @GetMapping()
     public Iterable<UserDto> getAllUsers() {
         return userRepository.findAll()
             .stream()
-            .map(user -> new UserDto(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail()))
+            .map(userMapper::toDto)
             .toList();
     }
 
@@ -33,12 +32,7 @@ public class UserController {
     public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
-        var userDto = new UserDto(
-                user.getId(),
-                user.getUsername(),
-                user.getEmail());
-        
-        return ResponseEntity.ok(userDto);
+        return ResponseEntity.ok(userMapper.toDto(user));
     }
 
     @PostMapping()
@@ -49,7 +43,6 @@ public class UserController {
         user.setPassword(request.password);
         User saved = userRepository.save(user);
 
-        var userDto = new UserDto(saved.getId(), saved.getUsername(), saved.getEmail());
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toDto(saved));
     }
 }

@@ -13,12 +13,13 @@ public class ProfileDto {
     private Long userId;
     private String firstName;
     private String lastName;
-    private Short age;
+    private Short userAge;
     private String gender;
+    private Boolean matchGender;
     private String city;
     private Boolean isStudent;
-    private String schoolName;
-    private String major;
+    private String school;
+    private String collegeMajor;
     private Boolean sharedGroceries;
     private Boolean isPetFriendly;
     private Boolean delegatedChores;
