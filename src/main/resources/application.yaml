@@ -10,6 +10,16 @@ spring:
     password: ${DB_PASSWORD:}
 matcher:
   weights:
+
+    # Order: sharedGroceries, isPetFriendly, delegatedChores
+
     bool: 1, 1, 1
+
+    # Order: cleanlinessPreference, socialPreference, guestPreference
+
     scale: 1, 1, 1
+
+  # cleanlinessPreference max=5
+  # socialPreference max=5
+  # guestPreference max=3
   scaleMaximums: 5, 5, 3
