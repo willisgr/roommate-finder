@@ -2,11 +2,24 @@ spring:
   application:
     name: roommate-finder
   datasource:
-    url: jdbc:mysql://localhost:3306/roommatefinderdb?createDatabaseIfNotExist=true
-    username: root
-    password: password
+    # Set DB_URL, DB_USERNAME and DB_PASSWORD as environment variables (or in your IntelliJ
+    # run configuration) instead of editing this file, so passwords never get committed.
+    # The values after the colon are local defaults used when a variable isn't set.
+    url: ${DB_URL:jdbc:mysql://localhost:3306/roommatefinderdb?createDatabaseIfNotExist=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:}
 matcher:
   weights:
+
+    # Order: sharedGroceries, isPetFriendly, delegatedChores
+
     bool: 1, 1, 1
+
+    # Order: cleanlinessPreference, socialPreference, guestPreference
+
     scale: 1, 1, 1
+
+  # cleanlinessPreference max=5
+  # socialPreference max=5
+  # guestPreference max=3
   scaleMaximums: 5, 5, 3

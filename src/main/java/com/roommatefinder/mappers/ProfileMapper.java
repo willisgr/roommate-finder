@@ -8,10 +8,12 @@ import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface ProfileMapper {
-    ProfileDto toDto(Profile profile);
 
     @Mapping(target = "user", ignore = true)
     Profile toEntity(ProfileDto profile);
 
-    void update(ProfileDto newProfile, @MappingTarget Profile oldProfile);
+    ProfileDto toDto(Profile profile);
+
+    void update(ProfileDto newProfile,
+                @MappingTarget Profile oldProfile);
 }
