@@ -1,71 +1,107 @@
 package com.roommatefinder.services;
 
-import com.roommatefinder.entities.Profile;
+import com.roommatefinder.dtos.MatchResultDto;
+import com.roommatefinder.dtos.ProfileDto;
+import com.roommatefinder.mappers.ProfileMapper;
 import com.roommatefinder.repositories.ProfileRepository;
 import com.roommatefinder.repositories.UserRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class ProfileService {
-    public final ProfileRepository profileRepository;
-    public final EntityManager entityManager;
-    public final UserRepository userRepository;
 
-    public void viewProfile(Long profileId) {
-        //Viewing profile information for a given profile ID
-        var profile = profileRepository.findById(profileId).orElseThrow();
-        System.out.println("Profile ID: " + profile.getId());
-        System.out.println("User Name: " + profile.getFirstName() + " " + profile.getLastName());
-        System.out.println("User Email: " + profile.getUser().getEmail());
-        System.out.println("Age: " + profile.getUserAge());
-        System.out.println("Gender: " + profile.getGender());
-        System.out.println("Match Gender?: " + (profile.getMatchGender() ? "Yes" : "No"));
-        System.out.println("City: " + profile.getCity());
-        System.out.println("Student?: " + (profile.getIsStudent() ? "Yes" : "No"));
-        System.out.println("School: " + profile.getSchool());
-        System.out.println("Major: " + profile.getCollegeMajor());
-        System.out.println("Split Groceries?: " + (profile.getSharedGroceries() ? "Yes" : "No"));
-        System.out.println("Pet Friendly? : " + (profile.getIsPetFriendly() ? "Yes" : "No"));
-        System.out.println("Delegate Chores?: " + (profile.getDelegatedChores() ? "Yes" : "No"));
-        System.out.println("Cleanliness: " + profile.getCleanlinessPreference());
-        System.out.println("Social Preference: " + profile.getSocialPreference());
-        System.out.println("Guest Preference: " + profile.getGuestPreference());
+    private final ProfileRepository profileRepository;
+    private final UserRepository userRepository;
+    private final ProfileMapper profileMapper;
+    private final WeightedMatchingService matchingService;
+
+    @Transactional(readOnly = true)
+    public ProfileDto getProfileById(Long id) {
+        var profile = profileRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found"));
+        return profileMapper.toDto(profile);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProfileDto> getAllProfiles() {
+        return profileRepository.findAll()
+                .stream()
+                .map(profileMapper::toDto)
+                .toList();
     }
 
     @Transactional
-    public void addProfile() {
-        // Implementation for adding a profile
-        var user = userRepository.findById(1L).orElseThrow();
-        var profile = Profile.builder()
-                .user(user)
-                .firstName("John")
-                .lastName("Doe")
-                .userAge((short) 25)
-                .gender("Male")
-                .matchGender(true)
-                .city("New York")
-                .isStudent(true)
-                .school("NYU")
-                .collegeMajor("Computer Science")
-                .sharedGroceries(true)
-                .isPetFriendly(false)
-                .delegatedChores(true)
-                .cleanlinessPreference((byte) 3)
-                .socialPreference((byte) 4)
-                .guestPreference((byte) 3)
-                .build();
-        profileRepository.save(profile);
+    public ProfileDto createProfile(ProfileDto data) {
+        if (data.getUserId() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User ID is required");
+        }
+
+        var user = userRepository.findById(data.getUserId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User does not exist"));
+
+        if (profileRepository.existsById(data.getUserId())) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Profile already exists for this user");
+        }
+
+        var profile = profileMapper.toEntity(data);
+        profile.setUser(user);
+        if (profile.getMatchGender() == null) {
+            profile.setMatchGender(false);
+        }
+
+        var savedProfile = profileRepository.save(profile);
+        return profileMapper.toDto(savedProfile);
     }
 
     @Transactional
-    public void deleteProfile(Long profileId) {
-        // Implementation for deleting a profile
-        var profile = profileRepository.findById(profileId).orElseThrow();
+    public ProfileDto updateProfile(ProfileDto data) {
+        if (data.getUserId() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User ID is required");
+        }
+
+        var profile = profileRepository.findById(data.getUserId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found"));
+
+        profileMapper.update(data, profile);
+        var updatedProfile = profileRepository.save(profile);
+        return profileMapper.toDto(updatedProfile);
+    }
+
+    @Transactional
+    public void deleteProfile(Long id) {
+        var profile = profileRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found"));
         profileRepository.delete(profile);
     }
 
+    @Transactional(readOnly = true)
+    public MatchResultDto getSingleMatch(Long targetUserId, Long candidateUserId) {
+        var target = profileRepository.findById(targetUserId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Target profile not found"));
+        var candidate = profileRepository.findById(candidateUserId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Candidate profile not found"));
+
+        int percent = matchingService.getUserMatch(target, candidate);
+        return new MatchResultDto(target.getId(), candidate.getId(), percent);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MatchResultDto> getAllMatches(Long id) {
+        var target = profileRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found"));
+
+        var matches = matchingService.getUserMatches(target);
+        var results = new ArrayList<MatchResultDto>();
+        matches.forEach((candidateId, percent) ->
+                results.add(new MatchResultDto(id, candidateId, percent)));
+        return results;
+    }
 }
