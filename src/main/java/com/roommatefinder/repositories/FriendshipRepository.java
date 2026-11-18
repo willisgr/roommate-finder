@@ -1,7 +1,7 @@
 package com.roommatefinder.repositories;
 
 import com.roommatefinder.entities.Friendship;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FriendshipRepository extends CrudRepository<Friendship, Long> {
+public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 }
