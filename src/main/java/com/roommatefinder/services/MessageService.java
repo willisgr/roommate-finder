@@ -44,14 +44,10 @@ public class MessageService {
                 .build();
         var savedMessage = messageRepository.save(message);
 
-        return new MessageResponse(
-                savedMessage.getId(),
-                savedMessage.getSender().getId(),
-                savedMessage.getRecipient().getId(),
-                savedMessage.getMessageContent(),
-                savedMessage.getTimeSent()
-        );
+        return toResponse(savedMessage);
     }
+
+
 
     @Transactional
     public List<MessageResponse> getMessagesForUser(Long userId) {
@@ -62,14 +58,21 @@ public class MessageService {
         List<MessageResponse> responses = new ArrayList<>();
         for (Message message : messageRepository
                 .findBySender_IdOrRecipient_IdOrderByTimeSentAsc(userId, userId)) {
-            responses.add(new MessageResponse(
-                    message.getId(),
-                    message.getSender().getId(),
-                    message.getRecipient().getId(),
-                    message.getMessageContent(),
-                    message.getTimeSent()
-            ));
+            responses.add(toResponse(message));
         }
         return responses;
     }
+
+    private MessageResponse toResponse(Message message) {
+        return new MessageResponse(
+                message.getId(),
+                message.getSender().getId(),
+                message.getRecipient().getId(),
+                message.getMessageContent(),
+                message.getTimeSent()
+        );
+    }
+
+
 }
+
