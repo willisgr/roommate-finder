@@ -5,9 +5,6 @@ import com.roommatefinder.dtos.CreateUserRequest;
 import com.roommatefinder.dtos.DeleteUserRequest;
 import com.roommatefinder.dtos.UpdatePasswordRequest;
 import com.roommatefinder.dtos.UserDto;
-import com.roommatefinder.exceptions.UserNotFoundException;
-import com.roommatefinder.mappers.UserMapper;
-import com.roommatefinder.repositories.UserRepository;
 import com.roommatefinder.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,29 +15,23 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserRepository userRepository;
-    private final UserMapper userMapper;
     private final UserService userService;
 
     @GetMapping()
-    public Iterable<UserDto> getAllUsers() {
-        return userRepository.findAll()
-            .stream()
-            .map(userMapper::toDto)
-            .toList();
+    public ResponseEntity<Iterable<UserDto>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
-        var user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
-        return ResponseEntity.ok(userMapper.toDto(user));
+        return ResponseEntity.ok(userService.getUser(id));
     }
 
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody CreateUserRequest request) {
         return ResponseEntity.ok().body(userService.createUser(request));
     }
+
     @PutMapping
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto request) {
         return ResponseEntity.ok(userService.updateUser(request));
