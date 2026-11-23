@@ -3,7 +3,6 @@ package com.roommatefinder.services;
 import com.roommatefinder.dtos.CreateUserRequest;
 import com.roommatefinder.dtos.UpdatePasswordRequest;
 import com.roommatefinder.dtos.UserDto;
-import com.roommatefinder.entities.User;
 import com.roommatefinder.exceptions.UserNotFoundException;
 import com.roommatefinder.mappers.UserMapper;
 import com.roommatefinder.repositories.UserRepository;
@@ -19,9 +18,10 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    public User createUser(User user)
-    {
-        return userRepository.save(user);
+    @Transactional
+    public UserDto createUser(CreateUserRequest request) {
+        var user = userMapper.toEntity(request);
+        return userMapper.toDto(userRepository.save(user));
     }
 
     @Transactional
