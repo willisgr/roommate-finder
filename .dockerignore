@@ -1,0 +1,9 @@
+/frontend/.react-router
+build
+frontend/node_modules
+README.md
+.git
+target/
+**/.env
+**/.env.*
+!**/.env.example

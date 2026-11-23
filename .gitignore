@@ -3,6 +3,7 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+.mvn/timing.properties
 
 ### STS ###
 .apt_generated
@@ -31,3 +32,15 @@ build/
 
 ### VS Code ###
 .vscode/
+.DS_Store
+.env
+/node_modules/
+
+# Frontend
+/.react-router/
+/build/
+/frontend/node_modules/
+/frontend/.react-router/
+/frontend/build/
+/frontend/.env
+/frontend/.env.*
