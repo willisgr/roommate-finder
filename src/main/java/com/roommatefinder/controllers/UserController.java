@@ -4,13 +4,11 @@ package com.roommatefinder.controllers;
 import com.roommatefinder.dtos.CreateUserRequest;
 import com.roommatefinder.dtos.UpdatePasswordRequest;
 import com.roommatefinder.dtos.UserDto;
-import com.roommatefinder.entities.User;
 import com.roommatefinder.exceptions.UserNotFoundException;
 import com.roommatefinder.mappers.UserMapper;
 import com.roommatefinder.repositories.UserRepository;
 import com.roommatefinder.services.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,13 +38,7 @@ public class UserController {
 
     @PostMapping()
     public ResponseEntity<UserDto> createUser(@RequestBody CreateUserRequest request) {
-        var user = new User();
-        user.setUsername(request.username);
-        user.setEmail(request.email);
-        user.setPassword(request.password);
-        User saved = userRepository.save(user);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toDto(saved));
+        return ResponseEntity.ok().body(userService.createUser(request));
     }
     @PutMapping
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto request) {
