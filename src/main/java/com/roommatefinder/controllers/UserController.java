@@ -47,6 +47,7 @@ public class UserController {
 
     @PutMapping("/update-password")
     public ResponseEntity<Void> updatePassword(@RequestBody UpdatePasswordRequest request) {
-        return userService.updatePassword(request);
+        userService.updatePassword(request);
+        return ResponseEntity.noContent().build();
     }
 }

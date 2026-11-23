@@ -4,12 +4,11 @@ import com.roommatefinder.dtos.CreateUserRequest;
 import com.roommatefinder.dtos.UpdatePasswordRequest;
 import com.roommatefinder.dtos.UserDto;
 import com.roommatefinder.exceptions.UserNotFoundException;
+import com.roommatefinder.exceptions.WrongPasswordException;
 import com.roommatefinder.mappers.UserMapper;
 import com.roommatefinder.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -41,15 +40,14 @@ public class UserService {
     }
 
     @Transactional
-    public ResponseEntity<Void> updatePassword(UpdatePasswordRequest request) {
+    public void updatePassword(UpdatePasswordRequest request) {
         var userId = request.getUserId();
         var user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         if (request.getOldPassword().equals(user.getPassword())) {
             user.setPassword(request.getNewPassword());
             userRepository.save(user);
-            return ResponseEntity.noContent().build();
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new WrongPasswordException();
         }
     }
 }
