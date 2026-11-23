@@ -1,8 +1,11 @@
 package com.roommatefinder.services;
 
+import com.roommatefinder.dtos.CreateUserRequest;
 import com.roommatefinder.dtos.UpdatePasswordRequest;
+import com.roommatefinder.dtos.UserDto;
 import com.roommatefinder.entities.User;
 import com.roommatefinder.exceptions.UserNotFoundException;
+import com.roommatefinder.mappers.UserMapper;
 import com.roommatefinder.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     public User createUser(User user)
     {
@@ -25,6 +29,15 @@ public class UserService {
     {
         var user = userRepository.findById(id).orElseThrow();
         userRepository.delete(user);
+    }
+
+    @Transactional
+    public UserDto updateUser(UserDto request) {
+        var userId = request.getUserId();
+        var user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        return userMapper.toDto(userRepository.save(user));
     }
 
     @Transactional
