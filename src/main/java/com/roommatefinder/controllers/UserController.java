@@ -48,6 +48,10 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toDto(saved));
     }
+    @PutMapping
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto request) {
+        return ResponseEntity.ok(userService.updateUser(request));
+    }
 
     @PutMapping("/update-password")
     public ResponseEntity<Void> updatePassword(@RequestBody UpdatePasswordRequest request) {
