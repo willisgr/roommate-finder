@@ -31,11 +31,7 @@ public class WeightedMatchingService implements ProfileMatchingService{
 
     // this uses default weights defined in the application.yaml file
     public Map<Long, Integer> getUserMatches(Profile userProfile) {
-        var pool = getMatchingPool(userProfile);
-        Map<Long, Integer> matches = new HashMap<>();
-        pool.forEach(candidate ->
-                matches.put(candidate.getId(), getMatchPercent(userProfile, candidate, weights)));
-        return matches;
+        return getUserMatches(userProfile, weights);
     }
 
     // this uses custom weights passed in as a function argument.
