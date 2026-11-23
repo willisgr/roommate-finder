@@ -2,6 +2,7 @@ package com.roommatefinder.controllers;
 
 
 import com.roommatefinder.dtos.CreateUserRequest;
+import com.roommatefinder.dtos.DeleteUserRequest;
 import com.roommatefinder.dtos.UpdatePasswordRequest;
 import com.roommatefinder.dtos.UserDto;
 import com.roommatefinder.exceptions.UserNotFoundException;
@@ -36,7 +37,7 @@ public class UserController {
         return ResponseEntity.ok(userMapper.toDto(user));
     }
 
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody CreateUserRequest request) {
         return ResponseEntity.ok().body(userService.createUser(request));
     }
@@ -48,6 +49,12 @@ public class UserController {
     @PutMapping("/update-password")
     public ResponseEntity<Void> updatePassword(@RequestBody UpdatePasswordRequest request) {
         userService.updatePassword(request);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteUser(@RequestBody DeleteUserRequest request) {
+        userService.deleteUser(request);
         return ResponseEntity.noContent().build();
     }
 }
