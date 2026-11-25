@@ -1,5 +1,6 @@
 package com.roommatefinder.mappers;
 
+import com.roommatefinder.dtos.CreateFriendshipDto;
 import com.roommatefinder.dtos.FriendshipDto;
 import com.roommatefinder.entities.Friendship;
 import org.mapstruct.Mapper;
@@ -15,4 +16,7 @@ public interface FriendshipMapper {
     FriendshipDto toDto(Friendship friendship);
 
     List<FriendshipDto> toDtoList(List<Friendship> friendships);
+
+    @Mapping(target = "id", ignore = true)
+    Friendship toEntity(CreateFriendshipDto friendship);
 }
