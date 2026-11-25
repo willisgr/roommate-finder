@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
-    @ExceptionHandler(ProfileNotFoundException.class)
+    @ExceptionHandler(FriendshipNotFoundException.class)
     public ResponseEntity<String> handleFriendshipNotFound(FriendshipNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
