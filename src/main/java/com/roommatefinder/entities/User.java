@@ -44,7 +44,7 @@ public class User {
     }
 
     @Builder.Default
-    @OneToMany(mappedBy = "user_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friendship> friendshipList = new ArrayList<>();
 
     public void addFriendship(Friendship friendship) {
