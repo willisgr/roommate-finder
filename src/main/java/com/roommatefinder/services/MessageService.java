@@ -3,6 +3,7 @@ package com.roommatefinder.services;
 import com.roommatefinder.dtos.MessageResponse;
 import com.roommatefinder.dtos.SendMessageRequest;
 import com.roommatefinder.entities.Message;
+import com.roommatefinder.exceptions.EmptyMessageException;
 import com.roommatefinder.exceptions.UserNotFoundException;
 import com.roommatefinder.mappers.MessageMapper;
 import com.roommatefinder.repositories.MessageRepository;
@@ -21,33 +22,24 @@ import java.util.List;
 @AllArgsConstructor
 public class MessageService {
     private final MessageRepository messageRepository;
-    private final UserRepository userRepository;
     private final UserService userService;
     private final MessageMapper messageMapper;
+    private final UserRepository userRepository;
 
     @Transactional
     public MessageResponse sendMessage(SendMessageRequest request) {
         if (request.getMessageContent() == null || request.getMessageContent().isBlank()) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Message content cannot be empty"
-            );
+            throw new EmptyMessageException();
         }
+        var sender = userService.findUser(request.getSenderId());
+        var recipient = userService.findUser(request.getRecipientId());
 
-        var sender = userRepository.findById(request.getSenderId())
-                .orElseThrow(() -> new UserNotFoundException(request.getSenderId()));
+        var message = messageMapper.toEntity(request);
+        sender.sendMessage(recipient, message);
+        userRepository.save(sender);
+        userRepository.save(recipient);
 
-        var recipient = userRepository.findById(request.getReceiverId())
-                .orElseThrow(() -> new UserNotFoundException(request.getReceiverId()));
-
-        var message = Message.builder()
-                .sender(sender)
-                .recipient(recipient)
-                .messageContent(request.getMessageContent())
-                .timeSent(Instant.now())
-                .build();
-        var savedMessage = messageRepository.save(message);
-
-        return toResponse(savedMessage);
+        return messageMapper.toDto(message);
     }
 
     public List<MessageResponse> getIncomingMessagesByUser(Long userId) {
@@ -58,18 +50,6 @@ public class MessageService {
         var user = userService.findUser(userId);
         return messageMapper.toDtoList(user.getOutgoingMessages());
     }
-
-
-    private MessageResponse toResponse(Message message) {
-        return new MessageResponse(
-                message.getId(),
-                message.getSender().getId(),
-                message.getRecipient().getId(),
-                message.getMessageContent(),
-                message.getTimeSent()
-        );
-    }
-
 
 }
 
