@@ -2,20 +2,14 @@ package com.roommatefinder.services;
 
 import com.roommatefinder.dtos.MessageResponse;
 import com.roommatefinder.dtos.SendMessageRequest;
-import com.roommatefinder.entities.Message;
 import com.roommatefinder.exceptions.EmptyMessageException;
-import com.roommatefinder.exceptions.UserNotFoundException;
 import com.roommatefinder.mappers.MessageMapper;
 import com.roommatefinder.repositories.MessageRepository;
 import com.roommatefinder.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
