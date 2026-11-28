@@ -43,4 +43,13 @@ public class User {
         message.setRecipient(recipient);
     }
 
+    @Builder.Default
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Friendship> friendshipList = new ArrayList<>();
+
+    public void addFriendship(Friendship friendship) {
+        this.friendshipList.add(friendship);
+        friendship.getFriend().friendshipList.add(friendship);
+    }
+
 }
