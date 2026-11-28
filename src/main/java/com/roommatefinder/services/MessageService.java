@@ -3,6 +3,7 @@ package com.roommatefinder.services;
 import com.roommatefinder.dtos.MessageResponse;
 import com.roommatefinder.dtos.SendMessageRequest;
 import com.roommatefinder.exceptions.EmptyMessageException;
+import com.roommatefinder.exceptions.MessageNotFoundException;
 import com.roommatefinder.mappers.MessageMapper;
 import com.roommatefinder.repositories.MessageRepository;
 import com.roommatefinder.repositories.UserRepository;
@@ -19,6 +20,11 @@ public class MessageService {
     private final UserService userService;
     private final MessageMapper messageMapper;
     private final UserRepository userRepository;
+
+    public MessageResponse getMessageById(Long id) {
+        return messageMapper.toDto(messageRepository.findById(id).orElseThrow(() ->
+                new MessageNotFoundException(id)));
+    }
 
     @Transactional
     public MessageResponse sendMessage(SendMessageRequest request) {

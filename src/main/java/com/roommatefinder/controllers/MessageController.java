@@ -15,6 +15,11 @@ public class MessageController {
 
     private final MessageService messageService;
 
+    @GetMapping("/{id}")
+    public ResponseEntity<MessageResponse> getMessageById(@PathVariable Long id) {
+        return ResponseEntity.ok().body(messageService.getMessageById(id));
+    }
+
     @GetMapping("/incoming/{userId}")
     public ResponseEntity<Iterable<MessageResponse>> getIncomingMessagesByUser(@PathVariable Long userId) {
         return ResponseEntity.ok().body(messageService.getIncomingMessagesByUser(userId));
