@@ -2,77 +2,54 @@ package com.roommatefinder.services;
 
 import com.roommatefinder.dtos.MessageResponse;
 import com.roommatefinder.dtos.SendMessageRequest;
-import com.roommatefinder.entities.Message;
-import com.roommatefinder.exceptions.UserNotFoundException;
+import com.roommatefinder.exceptions.EmptyMessageException;
+import com.roommatefinder.exceptions.MessageNotFoundException;
+import com.roommatefinder.mappers.MessageMapper;
 import com.roommatefinder.repositories.MessageRepository;
 import com.roommatefinder.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @AllArgsConstructor
 public class MessageService {
     private final MessageRepository messageRepository;
+    private final UserService userService;
+    private final MessageMapper messageMapper;
     private final UserRepository userRepository;
+
+    public MessageResponse getMessageById(Long id) {
+        return messageMapper.toDto(messageRepository.findById(id).orElseThrow(() ->
+                new MessageNotFoundException(id)));
+    }
 
     @Transactional
     public MessageResponse sendMessage(SendMessageRequest request) {
         if (request.getMessageContent() == null || request.getMessageContent().isBlank()) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Message content cannot be empty"
-            );
+            throw new EmptyMessageException();
         }
+        var sender = userService.findUser(request.getSenderId());
+        var recipient = userService.findUser(request.getRecipientId());
 
-        var sender = userRepository.findById(request.getSenderId())
-                .orElseThrow(() -> new UserNotFoundException(request.getSenderId()));
+        var message = messageMapper.toEntity(request);
+        sender.sendMessage(recipient, message);
+        userRepository.save(sender);
+        userRepository.save(recipient);
 
-        var recipient = userRepository.findById(request.getReceiverId())
-                .orElseThrow(() -> new UserNotFoundException(request.getReceiverId()));
-
-        var message = Message.builder()
-                .sender(sender)
-                .recipient(recipient)
-                .messageContent(request.getMessageContent())
-                .timeSent(Instant.now())
-                .build();
-        var savedMessage = messageRepository.save(message);
-
-        return toResponse(savedMessage);
+        return messageMapper.toDto(message);
     }
 
-
-
-    @Transactional
-    public List<MessageResponse> getMessagesForUser(Long userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException(userId);
-        }
-
-        List<MessageResponse> responses = new ArrayList<>();
-        for (Message message : messageRepository
-                .findBySender_IdOrRecipient_IdOrderByTimeSentAsc(userId, userId)) {
-            responses.add(toResponse(message));
-        }
-        return responses;
+    public List<MessageResponse> getIncomingMessagesByUser(Long userId) {
+        var user = userService.findUser(userId);
+        return messageMapper.toDtoList(user.getIncomingMessages());
     }
-
-    private MessageResponse toResponse(Message message) {
-        return new MessageResponse(
-                message.getId(),
-                message.getSender().getId(),
-                message.getRecipient().getId(),
-                message.getMessageContent(),
-                message.getTimeSent()
-        );
+    public List<MessageResponse> getOutgoingMessagesByUser(Long userId) {
+        var user = userService.findUser(userId);
+        return messageMapper.toDtoList(user.getOutgoingMessages());
     }
-
 
 }
 

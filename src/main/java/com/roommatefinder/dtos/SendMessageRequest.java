@@ -7,6 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class SendMessageRequest {
     private Long senderId;
-    private Long receiverId;
+    private Long recipientId;
     private String messageContent;
 }
