@@ -5,6 +5,7 @@ import com.roommatefinder.dtos.SendMessageRequest;
 import com.roommatefinder.services.MessageService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,9 +17,13 @@ public class MessageController {
 
     private final MessageService messageService;
 
-    @GetMapping("/user/{userId}")
-    public List<MessageResponse> getMessagesForUser(@PathVariable Long userId) {
-        return messageService.getMessagesForUser(userId);
+    @GetMapping("/incoming/{userId}")
+    public ResponseEntity<Iterable<MessageResponse>> getIncomingMessagesByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok().body(messageService.getIncomingMessagesByUser(userId));
+    }
+    @GetMapping("/outgoing/{userId}")
+    public ResponseEntity<Iterable<MessageResponse>> getOutgoingMessagesByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok().body(messageService.getOutgoingMessagesByUser(userId));
     }
 
     @PostMapping()
