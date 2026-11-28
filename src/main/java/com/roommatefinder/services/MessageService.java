@@ -4,6 +4,7 @@ import com.roommatefinder.dtos.MessageResponse;
 import com.roommatefinder.dtos.SendMessageRequest;
 import com.roommatefinder.entities.Message;
 import com.roommatefinder.exceptions.UserNotFoundException;
+import com.roommatefinder.mappers.MessageMapper;
 import com.roommatefinder.repositories.MessageRepository;
 import com.roommatefinder.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -21,6 +22,8 @@ import java.util.List;
 public class MessageService {
     private final MessageRepository messageRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
+    private final MessageMapper messageMapper;
 
     @Transactional
     public MessageResponse sendMessage(SendMessageRequest request) {
@@ -47,21 +50,15 @@ public class MessageService {
         return toResponse(savedMessage);
     }
 
-
-
-    @Transactional
-    public List<MessageResponse> getMessagesForUser(Long userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new UserNotFoundException(userId);
-        }
-
-        List<MessageResponse> responses = new ArrayList<>();
-        for (Message message : messageRepository
-                .findBySender_IdOrRecipient_IdOrderByTimeSentAsc(userId, userId)) {
-            responses.add(toResponse(message));
-        }
-        return responses;
+    public List<MessageResponse> getIncomingMessagesByUser(Long userId) {
+        var user = userService.findUser(userId);
+        return messageMapper.toDtoList(user.getIncomingMessages());
     }
+    public List<MessageResponse> getOutgoingMessagesByUser(Long userId) {
+        var user = userService.findUser(userId);
+        return messageMapper.toDtoList(user.getOutgoingMessages());
+    }
+
 
     private MessageResponse toResponse(Message message) {
         return new MessageResponse(
