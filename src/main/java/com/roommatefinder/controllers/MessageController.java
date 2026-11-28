@@ -4,6 +4,7 @@ import com.roommatefinder.dtos.MessageResponse;
 import com.roommatefinder.dtos.SendMessageRequest;
 import com.roommatefinder.services.MessageService;
 import lombok.AllArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +28,7 @@ public class MessageController {
     }
 
     @PostMapping()
-    @ResponseStatus(HttpStatus.CREATED)
-    public MessageResponse sendMessage(@RequestBody SendMessageRequest request) {
-        return messageService.sendMessage(request);
+    public ResponseEntity<MessageResponse> sendMessage(@RequestBody SendMessageRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(messageService.sendMessage(request));
     }
 }
