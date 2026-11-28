@@ -4,12 +4,9 @@ import com.roommatefinder.dtos.MessageResponse;
 import com.roommatefinder.dtos.SendMessageRequest;
 import com.roommatefinder.services.MessageService;
 import lombok.AllArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -31,4 +28,5 @@ public class MessageController {
     public ResponseEntity<MessageResponse> sendMessage(@RequestBody SendMessageRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(messageService.sendMessage(request));
     }
+    // could add endpoints for editing or deleting a message but not necessary.
 }
