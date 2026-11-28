@@ -10,7 +10,7 @@ import java.time.Instant;
 public class MessageResponse {
     private Long id;
     private Long senderId;
-    private Long receiverId;
+    private Long recipientId;
     private String messageContent;
     private Instant timeSent;
 }
